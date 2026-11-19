@@ -1,6 +1,6 @@
 # Data Model (Draft)
 
-> **Status**: Draft — not implemented. Schema will be created in Phase 1.
+> **Status**: Draft - not implemented. Schema will be created in Phase 1.
 
 ## Core Tables
 
@@ -8,7 +8,7 @@
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid | PK |
-| seller_id | uuid | FK → auth.users |
+| seller_id | uuid | FK -> auth.users |
 | name | text | |
 | description | text | |
 | base_price | integer | Paise |
@@ -22,7 +22,7 @@
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid | PK |
-| product_id | uuid | FK → products |
+| product_id | uuid | FK -> products |
 | sku | text | Unique |
 | attributes | jsonb | e.g., {"color": "red", "size": "M"} |
 | price_override | integer | Optional, paise |
@@ -33,7 +33,7 @@
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid | PK |
-| variant_id | uuid | FK → variants |
+| variant_id | uuid | FK -> variants |
 | quantity | integer | Current available |
 | reserved | integer | Allocated to pending orders |
 | reorder_point | integer | Alert threshold |
@@ -55,7 +55,7 @@
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid | PK |
-| customer_id | uuid | FK → customers |
+| customer_id | uuid | FK -> customers |
 | order_number | text | Human-readable |
 | status | text | pending, confirmed, shipped, delivered, cancelled, returned |
 | payment_method | text | cod, prepaid, upi |
@@ -73,8 +73,8 @@
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid | PK |
-| order_id | uuid | FK → orders |
-| variant_id | uuid | FK → variants |
+| order_id | uuid | FK -> orders |
+| variant_id | uuid | FK -> variants |
 | quantity | integer | |
 | unit_price | integer | Paise (snapshot) |
 | total_price | integer | Paise |
@@ -83,7 +83,7 @@
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid | PK |
-| order_id | uuid | FK → orders |
+| order_id | uuid | FK -> orders |
 | method | text | cod, upi, card, wallet |
 | amount | integer | Paise |
 | status | text | pending, success, failed, refunded |
@@ -94,7 +94,7 @@
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid | PK |
-| order_id | uuid | FK → orders |
+| order_id | uuid | FK -> orders |
 | carrier | text | Delhivery, BlueDart, etc. |
 | tracking_number | text | |
 | tracking_url | text | |
@@ -106,7 +106,7 @@
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid | PK |
-| order_id | uuid | FK → orders |
+| order_id | uuid | FK -> orders |
 | from_status | text | |
 | to_status | text | |
 | changed_by | text | "agent:order", "admin:owner", "customer" |
@@ -134,7 +134,7 @@
 | proposal_type | text | verify_cod, cancel_order, create_po, send_reply, etc. |
 | payload_json | jsonb | Full proposal details |
 | status | text | pending, approved, rejected, expired |
-| decided_by | uuid | FK → auth.users (owner) |
+| decided_by | uuid | FK -> auth.users (owner) |
 | decided_at | timestamptz | |
 | expires_at | timestamptz | Auto-expire after 24h |
 | created_at | timestamptz | |
@@ -145,7 +145,7 @@
 erDiagram
     PRODUCTS ||--o{ VARIANTS : has
     VARIANTS ||--|| STOCK : tracks
-    PRODUCTS }|--|| SELLER : owned_by
+    PRODUCTS }|--|| USERS : owned_by
     CUSTOMERS ||--o{ ORDERS : places
     ORDERS ||--o{ ORDER_ITEMS : contains
     ORDERS ||--|| PAYMENTS : paid_by
@@ -153,7 +153,9 @@ erDiagram
     ORDERS ||--o{ STATUS_HISTORY : tracks
     ORDERS }o--o{ APPROVALS : triggers
     AGENTS }o--o{ APPROVALS : proposes
-    AUDIT_LOG }o--o{ ALL_TABLES : watches
+    AUDIT_LOG }o--o{ ORDERS : watches
+    AUDIT_LOG }o--o{ APPROVALS : watches
+    AUDIT_LOG }o--o{ STOCK : watches
 ```
 
 ## RLS Policy Sketch (Planned)

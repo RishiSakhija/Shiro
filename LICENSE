@@ -1,0 +1,13 @@
+# License
+
+**Undecided.**
+
+The license for Shiro will be chosen before any public release. Options under consideration:
+- MIT
+- Apache 2.0
+- AGPL-3.0
+- Custom (source-available, non-commercial)
+
+Do not assume any license until this file is updated with a valid SPDX identifier and full license text.
+
+See [README.md](README.md#contributing-security-license) for context.

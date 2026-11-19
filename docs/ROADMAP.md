@@ -1,8 +1,8 @@
 # Roadmap
 
-> All items unchecked unless marked ✅ Done. Phases 0–6 build the website + admin. Agents come after.
+> All items unchecked unless marked Done. Phases 0-6 build the website + admin. Agents come after.
 
-## Phase 0: Repository Setup ✅
+## Phase 0: Repository Setup Done
 
 - [x] Initialize Git repo
 - [x] Create folder structure (docs, apps/web, services/agents, database, scripts, .github)
@@ -69,7 +69,7 @@
 - [ ] Security review (RLS, secrets, dependencies)
 - [ ] Runbook: deploy, rollback, incident response
 - [ ] Public repo decision (license, CONTRIBUTING)
-- [ ] Launch 🚀
+- [ ] Launch
 
 ---
 
@@ -83,7 +83,7 @@
 | Review & Support Agent | Customers, orders, templates | Planned |
 | Orchestrator | All above agents exist | Planned |
 
-Each agent: build → test in staging → human-in-loop verification → production.
+Each agent: build -> test in staging -> human-in-loop verification -> production.
 
 ---
 
@@ -96,22 +96,22 @@ gantt
     axisFormat  %b %Y
 
     section Repo Setup
-    Phase 0           :done, p0, 2026-11-19, 1d
+    "Phase 0"           :done, p0, 2026-11-19, 1d
 
     section Website + Admin
-    Phase 1: Foundation     :active, p1, after p0, 14d
-    Phase 2: Storefront     :p2, after p1, 21d
-    Phase 3: Admin Panel    :p3, after p2, 21d
-    Phase 4: Approvals UI   :p4, after p3, 14d
-    Phase 5: Polish         :p5, after p4, 14d
-    Phase 6: Launch Prep    :p6, after p5, 14d
+    "Phase 1 Foundation"     :p1, after p0, 14d
+    "Phase 2 Storefront"     :p2, after p1, 21d
+    "Phase 3 Admin Panel"    :p3, after p2, 21d
+    "Phase 4 Approvals UI"   :p4, after p3, 14d
+    "Phase 5 Polish"         :p5, after p4, 14d
+    "Phase 6 Launch Prep"    :p6, after p5, 14d
 
-    section Agents (Sequential)
-    Order Agent     :crit, a1, after p6, 14d
-    Audit Agent     :a2, after a1, 10d
-    Inventory Agent :a3, after a2, 14d
-    Review Agent    :a4, after a3, 14d
-    Orchestrator    :a5, after a4, 10d
+    section Agents Sequential
+    "Order Agent"     :a1, after p6, 14d
+    "Audit Agent"     :a2, after a1, 10d
+    "Inventory Agent" :a3, after a2, 14d
+    "Review Agent"    :a4, after a3, 14d
+    "Orchestrator"    :a5, after a4, 10d
 ```
 
 ---
@@ -119,14 +119,14 @@ gantt
 ## Progress Checklist (Copy to Track)
 
 ```
-Phase 0: Repository Setup          [##########] 100% ✅
+Phase 0: Repository Setup          [##########] 100% Done
 Phase 1: Foundation                [          ]   0%
 Phase 2: Storefront                [          ]   0%
 Phase 3: Admin Panel               [          ]   0%
 Phase 4: Approvals UI              [          ]   0%
 Phase 5: Polish & Harden           [          ]   0%
 Phase 6: Launch Prep               [          ]   0%
-────────────────────────────────────────────────
+------------------------------------------------------------
 Order Agent                        [          ]   0%
 Audit Agent                        [          ]   0%
 Inventory Agent                    [          ]   0%

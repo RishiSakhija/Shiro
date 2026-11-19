@@ -13,7 +13,7 @@
 ![LangGraph](https://img.shields.io/badge/LangGraph-0.1+-1C3C3C?logo=langchain&logoColor=white)
 ![License](https://img.shields.io/badge/license-TBD-lightgrey)
 
-> **⚠️ Honest Status**: This project is in **Planning / Pre-alpha**. No code is implemented yet. All diagrams, features, and architecture represent *planned* work. See [ROADMAP](docs/ROADMAP.md) for phases.
+> **Honest Status**: This project is in **Planning / Pre-alpha**. No code is implemented yet. All diagrams, features, and architecture represent *planned* work. See [ROADMAP](docs/ROADMAP.md) for phases.
 
 ---
 
@@ -66,7 +66,7 @@ Shiro is an **e-commerce platform with a built-in AI agent team** for small Indi
 ### Core Loop
 
 ```
-Agent suggests → Human decides → Audit Agent records
+Agent suggests -> Human decides -> Audit Agent records
 ```
 
 Every important action goes through the owner. The **Audit Agent** watches all agents and creates an immutable trail.
@@ -78,7 +78,7 @@ Every important action goes through the owner. The **Audit Agent** watches all a
 | Profile | Example |
 |---------|---------|
 | **Primary** | Home-based toy seller, ~150 orders/month, Instagram primary channel |
-| **Secondary** | Any small Indian seller (50–500 orders/month) needing ops help |
+| **Secondary** | Any small Indian seller (50-500 orders/month) needing ops help |
 | **Pain points** | COD fraud, RTO, manual tracking, multilingual replies (Hindi/Gujarati), low budget |
 
 ---
@@ -90,14 +90,14 @@ Every important action goes through the owner. The **Audit Agent** watches all a
 ```mermaid
 flowchart LR
     subgraph Platform["Shiro Platform"]
-        SF[Storefront\n(Customer UI)]
-        AP[Admin Panel\n(Owner UI, Auth)]
-        AS[Agent Service\n(Python/LangGraph)]
+        SF["Storefront\n(Customer UI)"]
+        AP["Admin Panel\n(Owner UI, Auth)"]
+        AS["Agent Service\n(Python/LangGraph)"]
     end
 
-    DB[(Supabase\nPostgreSQL + Auth)]
-    TG[Telegram Bot\n(Approvals)]
-    VH[Vercel/Render\n(Hosting)]
+    DB[("Supabase\nPostgreSQL + Auth")]
+    TG["Telegram Bot\n(Approvals)"]
+    VH["Vercel/Render\n(Hosting)"]
 
     SF --> DB
     AP --> DB
@@ -111,11 +111,11 @@ flowchart LR
 
 ### Data Flow
 
-1. **Customer places order** → Storefront writes to `orders`, `order_items`, `payments`
-2. **Order Agent** reads new order → evaluates fraud signals → writes proposal to `approvals`
-3. **Admin Panel** shows pending approvals → Owner approves/rejects → writes decision
-4. **Orchestrator** executes approved action → writes to `status_history`, `audit_log`
-5. **Audit Agent** continuously verifies all writes match proposals → flags discrepancies
+1. **Customer places order** -> Storefront writes to `orders`, `order_items`, `payments`
+2. **Order Agent** reads new order -> evaluates fraud signals -> writes proposal to `approvals`
+3. **Admin Panel** shows pending approvals -> Owner approves/rejects -> writes decision
+4. **Orchestrator** executes approved action -> writes to `status_history`, `audit_log`
+5. **Audit Agent** continuously verifies all writes match proposals -> flags discrepancies
 6. **Telegram Bot** sends real-time approval requests to owner
 
 ---
@@ -124,11 +124,11 @@ flowchart LR
 
 | Agent | Job | Needs Human Approval For |
 |-------|-----|--------------------------|
-| **Orchestrator** | Routes tasks, coordinates agents, ensures audit trail | — (coordinates only) |
+| **Orchestrator** | Routes tasks, coordinates agents, ensures audit trail | - (coordinates only) |
 | **Order Agent** | Processes orders, flags fraud, manages status | COD verification, address correction, cancellation, refund, ship confirm |
 | **Inventory Agent** | Tracks stock, predicts restock, manages variants | Purchase orders, price changes, discontinuing SKUs |
 | **Review & Support Agent** | Drafts replies, manages reviews, handles FAQs | Sending replies, public review responses, policy exceptions |
-| **Audit Agent** | Watches all agents, verifies actions match proposals, flags drift | — (read-only watcher) |
+| **Audit Agent** | Watches all agents, verifies actions match proposals, flags drift | - (read-only watcher) |
 
 ### Agent Team Diagram
 
@@ -138,8 +138,8 @@ flowchart TB
         ORC[Orchestrator]
         OA[Order Agent]
         IA[Inventory Agent]
-        RSA[Review &\nSupport Agent]
-        AA[Audit Agent\n(Watcher)]
+        RSA["Review &\nSupport Agent"]
+        AA["Audit Agent\n(Watcher)"]
     end
 
     ORC --> OA
@@ -150,7 +150,7 @@ flowchart TB
     AA -.-> RSA
     AA -.-> ORC
 
-    OA --> DB[(Database)]
+    OA --> DB[("Database")]
     IA --> DB
     RSA --> DB
     ORC --> DB
@@ -172,14 +172,14 @@ sequenceDiagram
     participant TG as Telegram Bot
     participant O as Owner
 
-    C->>SF: Places COD order (₹2,500 toy)
+    C->>SF: Places COD order (Rs2,500 toy)
     SF->>DB: Creates order, payment=pending
     OA->>DB: Reads new order
     OA->>OA: Scores fraud signals\n(new customer, high value, address mismatch)
     OA->>DB: Writes proposal to approvals\n(type: verify_cod, risk: 0.82)
     DB->>AP: Realtime: new approval
     DB->>TG: Webhook: new approval
-    TG->>O: 📱 "Verify COD order #SH-1042?\nRisk: 82%\n[Approve] [Reject] [Call]"
+    TG->>O: "Verify COD order #SH-1042?\nRisk: 82%\n[Approve] [Reject] [Call]"
     O->>AP: Opens approval detail
     O->>AP: Clicks "Approve - Call Customer"
     AP->>DB: Updates approval status=approved
@@ -195,18 +195,18 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    A[Event: New Order /\nStock Low /\nMessage] --> B[Agent Analyzes]
-    B --> C[Writes Proposal\nto approvals table]
-    C --> D[Admin Panel +\nTelegram Notify Owner]
-    D --> E{Owner Decision}
-    E -->|Approve| F[Orchestrator\nExecutes Action]
-    E -->|Reject| G[Log Rejection\nNo Action]
-    E -->|Modify| H[Owner Edits\nProposal]
+    A["Event: New Order /\nStock Low /\nMessage"] --> B["Agent Analyzes"]
+    B --> C["Writes Proposal\nto approvals table"]
+    C --> D["Admin Panel +\nTelegram Notify Owner"]
+    D --> E{"Owner Decision"}
+    E -->|Approve| F["Orchestrator\nExecutes Action"]
+    E -->|Reject| G["Log Rejection\nNo Action"]
+    E -->|Modify| H["Owner Edits\nProposal"]
     H --> F
-    F --> I[Write status_history\n+ audit_log]
-    I --> J[Audit Agent\nVerifies Match]
-    J -->|Match| K[✅ Clean]
-    J -->|Drift| L[⚠️ Alert Owner]
+    F --> I["Write status_history\n+ audit_log"]
+    I --> J["Audit Agent\nVerifies Match"]
+    J -->|Match| K["Clean"]
+    J -->|Drift| L["Alert Owner"]
 ```
 
 ---
@@ -260,11 +260,11 @@ See [FEATURES.md](docs/FEATURES.md) for full lists.
 
 ## Roadmap
 
-### Phases 0–6: Website + Admin (Foundation → Launch)
+### Phases 0-6: Website + Admin (Foundation -> Launch)
 
 | Phase | Focus | Duration |
 |-------|-------|----------|
-| **0** | Repository Setup | ✅ Done |
+| **0** | Repository Setup | Done |
 | **1** | Foundation (Next.js, Supabase, Schema, CI) | 2 weeks |
 | **2** | Storefront (Customer UI) | 3 weeks |
 | **3** | Admin Panel (Owner UI) | 3 weeks |
@@ -285,14 +285,14 @@ See [FEATURES.md](docs/FEATURES.md) for full lists.
 ### Progress
 
 ```
-Phase 0: Repository Setup          [##########] 100% ✅
+Phase 0: Repository Setup          [##########] 100% Done
 Phase 1: Foundation                [          ]   0%
 Phase 2: Storefront                [          ]   0%
 Phase 3: Admin Panel               [          ]   0%
 Phase 4: Approvals UI              [          ]   0%
 Phase 5: Polish & Harden           [          ]   0%
 Phase 6: Launch Prep               [          ]   0%
-────────────────────────────────────────────────
+------------------------------------------------------------
 Order Agent                        [          ]   0%
 Audit Agent                        [          ]   0%
 Inventory Agent                    [          ]   0%
@@ -309,22 +309,22 @@ gantt
     axisFormat  %b %Y
 
     section Repo Setup
-    Phase 0           :done, p0, 2026-11-19, 1d
+    "Phase 0"           :done, p0, 2026-11-19, 1d
 
     section Website + Admin
-    Phase 1: Foundation     :active, p1, after p0, 14d
-    Phase 2: Storefront     :p2, after p1, 21d
-    Phase 3: Admin Panel    :p3, after p2, 21d
-    Phase 4: Approvals UI   :p4, after p3, 14d
-    Phase 5: Polish         :p5, after p4, 14d
-    Phase 6: Launch Prep    :p6, after p5, 14d
+    "Phase 1 Foundation"     :p1, after p0, 14d
+    "Phase 2 Storefront"     :p2, after p1, 21d
+    "Phase 3 Admin Panel"    :p3, after p2, 21d
+    "Phase 4 Approvals UI"   :p4, after p3, 14d
+    "Phase 5 Polish"         :p5, after p4, 14d
+    "Phase 6 Launch Prep"    :p6, after p5, 14d
 
-    section Agents (Sequential)
-    Order Agent     :crit, a1, after p6, 14d
-    Audit Agent     :a2, after a1, 10d
-    Inventory Agent :a3, after a2, 14d
-    Review Agent    :a4, after a3, 14d
-    Orchestrator    :a5, after a4, 10d
+    section Agents Sequential
+    "Order Agent"     :a1, after p6, 14d
+    "Audit Agent"     :a2, after a1, 10d
+    "Inventory Agent" :a3, after a2, 14d
+    "Review Agent"    :a4, after a3, 14d
+    "Orchestrator"    :a5, after a4, 10d
 ```
 
 See [ROADMAP.md](docs/ROADMAP.md) for detailed checkboxes.
@@ -355,7 +355,7 @@ Shiro/
 ├── AGENTS.md           # Rules for AI coding tools
 ├── .gitignore
 ├── .env.example
-├── LICENSE             # TBD — undecided
+├── LICENSE             # TBD - undecided
 └── README.md           # This file
 ```
 
@@ -363,11 +363,11 @@ Shiro/
 
 ## What Shiro Is Not
 
-- ❌ A fully autonomous "AI runs your business" system — human approval required
-- ❌ A replacement for your storefront — includes one, but theme is swappable
-- ❌ A generic chatbot — agents are specialized, auditable, tied to your data
-- ❌ The first multi-agent ops system — pattern exists; our angle is **small-seller, India-specific, human-approved, auditable, low-cost**
-- ❌ Built yet — **Planning / Pre-alpha**
+- Not a fully autonomous "AI runs your business" system — human approval required
+- Not a replacement for your storefront — includes one, but theme is swappable
+- Not a generic chatbot — agents are specialized, auditable, tied to your data
+- Not the first multi-agent ops system — pattern exists; our angle is **small-seller, India-specific, human-approved, auditable, low-cost**
+- Not built yet — **Planning / Pre-alpha**
 
 ---
 
@@ -375,12 +375,12 @@ Shiro/
 
 | Aspect | Typical Tools | Shiro |
 |--------|---------------|-------|
-| Target | Large retailers | Small Indian sellers (50–500 orders/mo) |
+| Target | Large retailers | Small Indian sellers (50-500 orders/mo) |
 | Control | Often autonomous | **Human approval for every important action** |
 | Audit | Rare | **Audit Agent watches all agents, immutable log** |
 | COD/RTO | Generic fraud | **India-specific: address mismatch, new customer, high-value COD** |
 | Language | English only | **Hindi + Gujarati (Devanagari + Latin script)** |
-| Cost | ₹10k+/mo | **Target ₹500–2000/mo** |
+| Cost | 10k+/mo | **Target 500-2000/mo** |
 | Data | Locked in | **Your Supabase project, your data** |
 
 ---
